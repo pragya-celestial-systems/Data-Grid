@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Column from "./Column";
+import MUICheckbox from "./MUICheckbox";
 
-function Row({ data }) {
+function Row({ data, index }) {
   const [rowData, setRowData] = useState([]);
 
   useEffect(() => {
@@ -12,7 +13,8 @@ function Row({ data }) {
   }, [data]);
 
   return (
-    <tr>
+    <tr data-row-index={index}>
+      <MUICheckbox />
       {rowData.map((value, index) => (
         <Column value={value} key={index} />
       ))}

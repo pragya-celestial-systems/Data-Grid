@@ -9,31 +9,42 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import Paper from "@mui/material/Paper";
+import DeleteButton from "./DeleteButton";
+import { useRowContext } from "../context/RowContext";
 
 export default function BasicTable() {
-  const { filteredData, setFilteredData, setTableData } = useTableData();
+  const { filteredData, setFilteredData, setTableData, tableData } =
+    useTableData();
   const { currentPage, rows } = usePagination();
+  const { rowsSelected } = useRowContext();
 
   useEffect(() => {
     setTableData(users);
   }, []);
 
   useEffect(() => {
-    setFilteredData(users.slice(currentPage * 10, currentPage * 10 + rows));
-  }, [currentPage, rows]);
+    if (tableData) {
+      setFilteredData(
+        tableData.slice(currentPage * 10, currentPage * 10 + rows)
+      );
+    }
+  }, [currentPage, rows, tableData]);
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="simple table">
-        <TableHead>
-          <TableHeading headings={filteredData[0]} />
-        </TableHead>
-        <TableBody>
-          {filteredData.map((row, index) => (
-            <Row key={index} data={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <>
+      {rowsSelected.length > 0 && <DeleteButton />}
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 500 }} aria-label="simple table">
+          <TableHead>
+            <TableHeading headings={filteredData[0]} />
+          </TableHead>
+          <TableBody>
+            {filteredData.map((row, index) => (
+              <Row key={index} data={row} index={index} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 }
