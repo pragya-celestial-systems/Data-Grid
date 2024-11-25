@@ -1,26 +1,26 @@
 import * as React from "react";
 import TablePagination from "@mui/material/TablePagination";
+import { usePagination } from "../context/PaginationContext";
 
 export default function TablePaginationDemo() {
-  const [page, setPage] = React.useState(2);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const { currentPage, setCurrentPage, rows, setRows } = usePagination();
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    setCurrentPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setRows(parseInt(event.target.value, 10));
+    setCurrentPage(0);
   };
 
   return (
     <TablePagination
       component="div"
       count={100}
-      page={page}
+      page={currentPage}
       onPageChange={handleChangePage}
-      rowsPerPage={rowsPerPage}
+      rowsPerPage={rows}
       onRowsPerPageChange={handleChangeRowsPerPage}
     />
   );

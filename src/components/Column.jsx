@@ -1,7 +1,8 @@
+import { TableCell } from "@mui/material";
 import React from "react";
 
 function Column({ value }) {
-  return <td>{value}</td>;
+  return <TableCell>{value}</TableCell>;
 }
 
 export default Column;

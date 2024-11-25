@@ -1,3 +1,4 @@
+import { TableCell, TableRow } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 function TableHeading({ headings }) {
@@ -10,7 +11,13 @@ function TableHeading({ headings }) {
     }
   }, [headings]);
 
-  return <>{keys && keys.map((key, index) => <th key={index}>{key}</th>)}</>;
+  return (
+    <TableRow>
+      {keys.map((key, index) => (
+        <TableCell key={index}>{key}</TableCell>
+      ))}
+    </TableRow>
+  );
 }
 
 export default TableHeading;
