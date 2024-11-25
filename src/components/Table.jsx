@@ -11,11 +11,11 @@ import TableHead from "@mui/material/TableHead";
 import Paper from "@mui/material/Paper";
 
 export default function BasicTable() {
-  const { filteredData, setFilteredData } = useTableData();
+  const { filteredData, setFilteredData, setTableData } = useTableData();
   const { currentPage, rows } = usePagination();
 
   useEffect(() => {
-    setFilteredData(users);
+    setTableData(users);
   }, []);
 
   useEffect(() => {
