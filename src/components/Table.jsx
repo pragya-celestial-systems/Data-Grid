@@ -1,39 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import users from "../database/users.data";
 import TableHeading from "./TableHeading";
 import Row from "./Row";
 import { useTableData } from "../context/tableData";
 import { usePagination } from "../context/PaginationContext";
-
-// function Table() {
-//   const {filteredData, setFilteredData} = useTableData();
-//   const {currentPage} = usePagination();
-
-//   useEffect(() => {
-//     setFilteredData(users)
-//   }, [])
-
-//   useEffect(() => {
-//     setFilteredData(users.slice(currentPage * 10, currentPage * 10 + 10))
-//   }, [currentPage])
-
-//   console.log(filteredData);
-
-//   return (
-//     <table>
-//       <thead>
-//         <TableHeading headings={filteredData[0]} />
-//       </thead>
-//       <tbody>
-//         {filteredData && filteredData.map((rowData, index) => (
-//           <Row data={rowData} key={index} />
-//         ))}
-//       </tbody>
-//     </table>
-//   );
-// }
-
-// export default Table;
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
@@ -59,8 +29,8 @@ export default function BasicTable() {
           <TableHeading headings={filteredData[0]} />
         </TableHead>
         <TableBody>
-          {filteredData.map((row) => (
-            <Row data={row} />
+          {filteredData.map((row, index) => (
+            <Row key={index} data={row} />
           ))}
         </TableBody>
       </Table>
