@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import users from "../database/users.data";
-import TableHeading from "./TableHeading";
+import TableHeadings from "./TableHeadings";
 import Row from "./Row";
 import { useTableData } from "../context/tableData";
 import { usePagination } from "../context/PaginationContext";
@@ -11,36 +11,63 @@ import TableHead from "@mui/material/TableHead";
 import Paper from "@mui/material/Paper";
 import DeleteButton from "./DeleteButton";
 import { useRowContext } from "../context/RowContext";
+import { useDispatch, useSelector } from "react-redux";
+import { setTableData } from "../store/slices/table.slice";
+import { v4 as uuidv4 } from "uuid";
 
 export default function BasicTable() {
-  const { filteredData, setFilteredData, setTableData, tableData } =
-    useTableData();
+  const dispatch = useDispatch();
+  const tableData = useSelector((state) => state.tableData);
+  const { filteredData, setFilteredData } = useTableData();
   const { currentPage, rows } = usePagination();
-  const { rowsSelected } = useRowContext();
+  const { rowsToBeDeleted, setRowsToBeDeleted } = useRowContext();
+  const tableRef = useRef();
 
   useEffect(() => {
-    setTableData(users);
+    if (users) {
+      dispatch(setTableData(users));
+    }
+  }, [users]);
+
+  useEffect(() => {
+    const data = JSON.parse(JSON.stringify(users));
+    data?.forEach((data) => {
+      data.unique_key = uuidv4();
+    });
+
+    dispatch(setTableData(data));
   }, []);
 
   useEffect(() => {
     if (tableData) {
       setFilteredData(
-        tableData.slice(currentPage * 10, currentPage * 10 + rows)
+        tableData.slice(currentPage * rows, currentPage * 10 + rows)
       );
     }
   }, [currentPage, rows, tableData]);
 
+  function handleDeleteRow() {
+    const updatedArray = tableData.filter(
+      (data) => !rowsToBeDeleted.includes(data.unique_key)
+    );
+
+    dispatch(setTableData(updatedArray));
+    setRowsToBeDeleted([]);
+  }
+
   return (
     <>
-      {rowsSelected.length > 0 && <DeleteButton />}
+      {rowsToBeDeleted.length > 0 && (
+        <DeleteButton onDelete={handleDeleteRow} />
+      )}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 500 }} aria-label="simple table">
           <TableHead>
-            <TableHeading headings={filteredData[0]} />
+            <TableHeadings headings={filteredData[0]} />
           </TableHead>
-          <TableBody>
+          <TableBody ref={tableRef}>
             {filteredData.map((row, index) => (
-              <Row key={index} data={row} index={index} />
+              <Row key={index} data={row} />
             ))}
           </TableBody>
         </Table>
