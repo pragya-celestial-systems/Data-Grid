@@ -1,6 +1,6 @@
-import { TableCell, TableRow } from "@mui/material";
+import { TableRow } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import MUICheckbox from "./MUICheckbox";
+import THeading from "./Theading";
 
 function TableHeading({ headings }) {
   const [keys, setKeys] = useState([]);
@@ -14,9 +14,9 @@ function TableHeading({ headings }) {
 
   return (
     <TableRow>
-      <MUICheckbox />
+      <p></p>
       {keys.map((key, index) => (
-        <TableCell key={index}>{key}</TableCell>
+        <THeading key={index} index={index} heading={key} columnKey={key} />
       ))}
     </TableRow>
   );

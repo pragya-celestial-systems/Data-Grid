@@ -1,11 +1,11 @@
 import * as React from "react";
 import TablePagination from "@mui/material/TablePagination";
 import { usePagination } from "../context/PaginationContext";
-import { useTableData } from "../context/tableData";
+import { useSelector } from "react-redux";
 
 export default function TablePaginationDemo() {
   const { currentPage, setCurrentPage, rows, setRows } = usePagination();
-  const { tableData } = useTableData();
+  const tableData = useSelector((state) => state.tableData);
 
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
