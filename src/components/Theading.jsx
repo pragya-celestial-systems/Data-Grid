@@ -17,7 +17,7 @@ function THeading({ index, heading, columnKey }) {
     const sortedData = [...filteredData];
 
     if (sortType === "default") {
-      setFilteredData([...filteredData]); 
+      setFilteredData([...filteredData]);
     } else if (sortType === "ascending") {
       sortedData.sort((a, b) => {
         if (typeof a[columnKey] === "string") {
