@@ -23,11 +23,12 @@ export default function BasicTable() {
 
   useEffect(() => {
     if (tableData) {
-      setFilteredData(
-        tableData.slice(currentPage * rows, currentPage * 10 + rows)
-      );
+      const startIndex = currentPage * rows; 
+      const endIndex = startIndex + rows;
+      setFilteredData(tableData.slice(startIndex, endIndex));
     }
   }, [currentPage, rows, tableData]);
+  
 
   function handleDeleteRow() {
     const confirm = window.confirm(

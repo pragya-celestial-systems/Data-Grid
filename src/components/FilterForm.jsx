@@ -1,8 +1,13 @@
 import * as React from "react";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
-import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { Button } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import {
+  Button,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import { useSelector } from "react-redux";
 import { useTableData } from "../context/tableData";
 import { makeStyles } from "@mui/styles";
@@ -24,44 +29,182 @@ const useFormStyles = makeStyles({
 
 export default function InputAdornments() {
   const classes = useFormStyles();
-  const [searchVal, setSearchVal] = React.useState("");
   const data = useSelector((state) => state.tableData);
-  const { tableData, setTableData } = useTableData();
+  const { setTableData } = useTableData();
+  const [headings, setHeadings] = React.useState([]);
+  const [query, setQuery] = React.useState("");
+  const [select, setSelect] = React.useState({
+    column: "",
+    queryType: "",
+  });
 
-  function handleSearchQuery() {
-    if (!searchVal) {
-      setTableData(data);
+  React.useEffect(() => {
+    setHeadings(Object.keys(data[0]));
+  }, [data]);
+
+  function validateFormData(obj) {
+    if (select.column === "") {
+      return false;
+    } else if (select.queryType === "") {
+      return false;
+    } else if (query === "") {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function handleSearch() {
+    const isValid = validateFormData(select);
+
+    if (!isValid) {
+      alert("Please fill the required fields.");
       return;
     }
 
-    const filteredData = tableData.filter((data) => {
-      const dataObj = Object.values(data);
-      return dataObj.find((value) =>
-        value.toString().toLowerCase().includes(searchVal.toLowerCase())
+    if (select.queryType === "contains") {
+      filterContains();
+      console.log(select, query);
+      return;
+    }
+
+    if (select.queryType === "equals") {
+      filterEquals();
+      console.log(select, query);
+      return;
+    }
+
+    if (select.queryType === "greater-than") {
+      filterGreaterThan();
+      return;
+    }
+
+    if (select.queryType === "less-than") {
+      filterLessThan();
+      return;
+    }
+  }
+
+  function filterContains() {
+    const filteredData = data.filter((d) => {
+      const columnValue = d[select.column];
+      return (
+        columnValue &&
+        columnValue.toString().toLowerCase().includes(query.toLowerCase())
       );
     });
 
     setTableData(filteredData);
-    setSearchVal("");
   }
 
-  function handleChangeSearch(e) {
-    if (e.target.value === "") {
-      setTableData(data);
+  function filterEquals() {
+    const filteredData = data.filter((d) => {
+      const columnValue = d[select.column];
+      return (
+        columnValue &&
+        columnValue.toString().toLowerCase() === query.trim().toLowerCase()
+      );
+    });
+
+    setTableData(filteredData);
+  }
+
+  function filterGreaterThan() {
+    if(isNaN(query)){
+      alert("Query must be a number");
+      return
     }
 
-    setSearchVal(e.target.value);
+    const filteredData = data.filter(d => {
+      const column = d[select.column];
+      return column && Number(column) > Number(query);
+    })
+
+    setTableData(filteredData)
+  }
+
+  function filterLessThan() {
+    if(isNaN(query)){
+      alert("Query must be a number");
+      return
+    }
+
+    const filteredData = data.filter(d => {
+      const column = d[select.column];
+      return column && Number(column) < Number(query);
+    })
+
+    setTableData(filteredData)
+  }
+
+  function handleChangeQuery(e) {
+    const value = e.target.value;
+    setQuery(value);
   }
 
   function handleResetSearch() {
     setTableData(data);
+    setSelect({ column: "", queryType: "" });
+    setQuery("");
+  }
+
+  function handleChangeValue(e) {
+    const { name, value } = e.target;
+
+    setSelect((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+
+    console.log(`Updated ${name}:`, value);
   }
 
   return (
     <div className={classes.formContainer}>
+      <InputLabel
+        id="demo-simple-select-label"
+        sx={{ marginRight: "5px" }}
+        required
+      >
+        Column
+      </InputLabel>
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={select.column}
+        name="column"
+        onChange={handleChangeValue}
+      >
+        {headings.length > 0 &&
+          headings.map((heading, index) => (
+            <MenuItem key={index} value={heading}>
+              {heading}
+            </MenuItem>
+          ))}
+      </Select>
+      <InputLabel
+        required
+        id="demo-simple-select-label"
+        sx={{ margin: "auto 5px auto 10px" }}
+      >
+        Query Type
+      </InputLabel>
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={select.queryType}
+        name="queryType"
+        onChange={handleChangeValue}
+      >
+        <MenuItem value="equals">Equals</MenuItem>
+        <MenuItem value="less-than">Less Than</MenuItem>
+        <MenuItem value="greater-than">Greater Than</MenuItem>
+        <MenuItem value="contains">Contains</MenuItem>
+      </Select>
       <TextField
-        value={searchVal}
-        onChange={handleChangeSearch}
+        required
+        value={query}
+        onChange={handleChangeQuery}
         label="Search Data"
         id="outlined-start-adornment"
         sx={{ m: 1, width: "25ch" }}
@@ -69,7 +212,7 @@ export default function InputAdornments() {
           input: {
             startAdornment: (
               <InputAdornment position="start">
-                <SwapVertIcon />
+                <SearchIcon />
               </InputAdornment>
             ),
           },
@@ -77,7 +220,8 @@ export default function InputAdornments() {
       />
       <Button
         variant="contained"
-        onClick={handleSearchQuery}
+        // onClick={handleSearchQuery}
+        onClick={handleSearch}
         className={classes.button}
       >
         Search

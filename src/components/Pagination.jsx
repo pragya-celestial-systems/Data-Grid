@@ -12,7 +12,7 @@ export default function TablePaginationDemo() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRows(parseInt(event.target.value, 10));
+    setRows(parseInt(event.target.value));
     setCurrentPage(0);
   };
 
