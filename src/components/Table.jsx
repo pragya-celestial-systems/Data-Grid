@@ -28,6 +28,16 @@ export default function BasicTable() {
   }, [users]);
 
   useEffect(() => {
+    if(areAllSelected){
+      const selectedRows = tableData.map(user => {
+        console.log(user);
+        return user.unique_key;
+      })
+      setRowsToBeDeleted(selectedRows);
+    }
+  }, [areAllSelected])
+
+  useEffect(() => {
     const data = JSON.parse(JSON.stringify(users));
     data?.forEach((data) => {
       data.unique_key = uuidv4();
