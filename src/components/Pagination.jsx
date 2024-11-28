@@ -5,10 +5,10 @@ import { useSelector } from "react-redux";
 import { useTableData } from "../context/tableData";
 
 export default function TablePaginationDemo() {
-  const { currentPage, setCurrentPage, rows, setRows, isFiltering } = usePagination();
-  const tableData = useSelector((state) => state.tableData);
-  const {filteredData} = useTableData();
-  console.log(tableData.length, filteredData.length);
+  const { currentPage, setCurrentPage, rows, setRows, isFiltering } =
+    usePagination();
+  const data = useSelector((state) => state.tableData);
+  const { tableData } = useTableData();
 
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
@@ -22,7 +22,7 @@ export default function TablePaginationDemo() {
   return (
     <TablePagination
       component="div"
-      count={isFiltering ? filteredData.length : tableData.length}
+      count={isFiltering ? tableData.length : data.length}
       page={currentPage}
       onPageChange={handleChangePage}
       rowsPerPage={rows}

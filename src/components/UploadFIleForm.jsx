@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Button } from "@mui/material";
 import axios from "axios";
 import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -33,15 +33,15 @@ const useFromStyles = makeStyles({
     marginTop: "1rem !important",
   },
   fileInput: {
-    padding:'0.5rem',
-    border: '1px solid lightgrey',
-    color:'grey',
-    fontWeight:700
+    padding: "0.5rem",
+    border: "1px solid lightgrey",
+    color: "grey",
+    fontWeight: 700,
   },
   selectedFileText: {
-    fontWeight:700,
-    color:'green'
-  }
+    fontWeight: 700,
+    color: "green",
+  },
 });
 
 function UploadFileForm() {
@@ -140,7 +140,11 @@ function UploadFileForm() {
               Drag 'n' drop a file here, or click to select one
             </p>
           )}
-          {file && <p className={classes.selectedFileText}>Selected file: {file.name}</p>}
+          {file && (
+            <p className={classes.selectedFileText}>
+              Selected file: {file.name}
+            </p>
+          )}
         </div>
         <Button
           onClick={handleFileUpload}

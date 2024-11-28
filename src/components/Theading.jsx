@@ -9,21 +9,21 @@ const sortTypes = ["default", "ascending", "descending"];
 
 function THeading({ index, heading, columnKey }) {
   const [sort, setSort] = useState(1);
-  const tableData = useSelector(state => state.tableData);
+  const tableData = useSelector((state) => state.tableData);
   const { currentPage, rows } = usePagination();
   const { filteredData, setFilteredData } = useTableData();
   const [filteredDataCopy, setFilteredDataCopy] = useState([]);
 
   useEffect(() => {
     if (tableData) {
-      const startIndex = currentPage * rows; 
+      const startIndex = currentPage * rows;
       const endIndex = startIndex + rows;
       setFilteredDataCopy(tableData.slice(startIndex, endIndex));
     }
   }, [tableData, currentPage, rows]);
 
   function handleSortColumn(e) {
-    setSort((prevState) => (++prevState) % 3);
+    setSort((prevState) => ++prevState % 3);
     const sortKey = Number(e.currentTarget.dataset.sort);
     const sortType = sortTypes[sortKey];
 
@@ -34,20 +34,20 @@ function THeading({ index, heading, columnKey }) {
       return;
     } else if (sortType === "ascending") {
       const updatedArray = sortInAscendingOrder(sortedData);
-      setFilteredData(updatedArray)
+      setFilteredData(updatedArray);
     } else if (sortType === "descending") {
       const updatedArray = sortInDescendingOrder(sortedData);
       setFilteredData(updatedArray);
     }
   }
 
-  function sortInAscendingOrder(dataArray){
+  function sortInAscendingOrder(dataArray) {
     dataArray.sort((a, b) => {
       if (typeof a[columnKey] === "string") {
-        if(!isNaN(a[columnKey])){
-          // convert the string into Number 
+        if (!isNaN(a[columnKey])) {
+          // convert the string into Number
           return Number(a[columnKey]) - Number(b[columnKey]);
-        }else{
+        } else {
           return a[columnKey].localeCompare(b[columnKey]);
         }
       }
@@ -60,13 +60,13 @@ function THeading({ index, heading, columnKey }) {
     return dataArray;
   }
 
-  function sortInDescendingOrder(dataArray){
+  function sortInDescendingOrder(dataArray) {
     dataArray.sort((a, b) => {
       if (typeof a[columnKey] === "string") {
-        if(!isNaN(a[columnKey])){
-          // convert the string into Number 
+        if (!isNaN(a[columnKey])) {
+          // convert the string into Number
           return Number(b[columnKey]) - Number(a[columnKey]);
-        }else{
+        } else {
           return b[columnKey].localeCompare(a[columnKey]);
         }
       }

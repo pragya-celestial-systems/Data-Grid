@@ -2,12 +2,7 @@ import * as React from "react";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
-import {
-  Button,
-  InputLabel,
-  MenuItem,
-  Select,
-} from "@mui/material";
+import { Button, InputLabel, MenuItem, Select } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useTableData } from "../context/tableData";
 import { makeStyles } from "@mui/styles";
@@ -31,16 +26,14 @@ const useFormStyles = makeStyles({
 export default function InputAdornments() {
   const classes = useFormStyles();
   const data = useSelector((state) => state.tableData);
-  const { setTableData, tableData } = useTableData();
+  const { setTableData } = useTableData();
   const [headings, setHeadings] = React.useState([]);
-  const {setIsFiltering} = usePagination();
+  const { setIsFiltering } = usePagination();
   const [query, setQuery] = React.useState("");
   const [select, setSelect] = React.useState({
     column: "",
     queryType: "",
   });
-
-  console.log(data.length, tableData.length, filteredData.length);
 
   React.useEffect(() => {
     setHeadings(Object.keys(data[0]));
@@ -114,31 +107,31 @@ export default function InputAdornments() {
   }
 
   function filterGreaterThan() {
-    if(isNaN(query)){
+    if (isNaN(query)) {
       alert("Query must be a number");
-      return
+      return;
     }
 
-    const filteredData = data.filter(d => {
+    const filteredData = data.filter((d) => {
       const column = d[select.column];
       return column && Number(column) > Number(query);
-    })
+    });
 
-    setTableData(filteredData)
+    setTableData(filteredData);
   }
 
   function filterLessThan() {
-    if(isNaN(query)){
+    if (isNaN(query)) {
       alert("Query must be a number");
-      return
+      return;
     }
 
-    const filteredData = data.filter(d => {
+    const filteredData = data.filter((d) => {
       const column = d[select.column];
       return column && Number(column) < Number(query);
-    })
+    });
 
-    setTableData(filteredData)
+    setTableData(filteredData);
   }
 
   function handleChangeQuery(e) {
