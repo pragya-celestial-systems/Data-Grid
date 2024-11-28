@@ -1,9 +1,11 @@
-import { TableRow } from "@mui/material";
+import { Checkbox, TableRow } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import THeading from "./Theading";
+import { useRowContext } from "../context/RowContext";
 
 function TableHeading({ headings }) {
   const [keys, setKeys] = useState([]);
+  const {setAreAllSelected, setRowsToBeDeleted} = useRowContext();
 
   useEffect(() => {
     if (headings) {
@@ -12,9 +14,19 @@ function TableHeading({ headings }) {
     }
   }, [headings]);
 
+  function handleCheckAll(e){
+    const isChecked = e.target.checked;
+    if(isChecked){
+      setAreAllSelected(isChecked)
+    }else{
+      setAreAllSelected(isChecked);
+      setRowsToBeDeleted([]);
+    }
+  }
+
   return (
     <TableRow>
-      <p></p>
+      <Checkbox onChange={handleCheckAll}/>
       {keys.map((key, index) => (
         <THeading key={index} index={index} heading={key} columnKey={key} />
       ))}
