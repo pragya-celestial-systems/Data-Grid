@@ -2,10 +2,13 @@ import * as React from "react";
 import TablePagination from "@mui/material/TablePagination";
 import { usePagination } from "../context/PaginationContext";
 import { useSelector } from "react-redux";
+import { useTableData } from "../context/tableData";
 
 export default function TablePaginationDemo() {
-  const { currentPage, setCurrentPage, rows, setRows } = usePagination();
-  const tableData = useSelector((state) => state.tableData);
+  const { currentPage, setCurrentPage, rows, setRows, isFiltering } =
+    usePagination();
+  const data = useSelector((state) => state.tableData);
+  const { tableData } = useTableData();
 
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
@@ -19,7 +22,7 @@ export default function TablePaginationDemo() {
   return (
     <TablePagination
       component="div"
-      count={tableData.length}
+      count={isFiltering ? tableData.length : data.length}
       page={currentPage}
       onPageChange={handleChangePage}
       rowsPerPage={rows}

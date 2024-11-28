@@ -2,15 +2,11 @@ import * as React from "react";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
-import {
-  Button,
-  InputLabel,
-  MenuItem,
-  Select,
-} from "@mui/material";
+import { Button, InputLabel, MenuItem, Select } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useTableData } from "../context/tableData";
 import { makeStyles } from "@mui/styles";
+import { usePagination } from "../context/PaginationContext";
 
 const useFormStyles = makeStyles({
   formContainer: {
@@ -32,6 +28,7 @@ export default function InputAdornments() {
   const data = useSelector((state) => state.tableData);
   const { setTableData } = useTableData();
   const [headings, setHeadings] = React.useState([]);
+  const { setIsFiltering } = usePagination();
   const [query, setQuery] = React.useState("");
   const [select, setSelect] = React.useState({
     column: "",
@@ -62,15 +59,15 @@ export default function InputAdornments() {
       return;
     }
 
+    setIsFiltering(true);
+
     if (select.queryType === "contains") {
       filterContains();
-      console.log(select, query);
       return;
     }
 
     if (select.queryType === "equals") {
       filterEquals();
-      console.log(select, query);
       return;
     }
 
@@ -110,31 +107,31 @@ export default function InputAdornments() {
   }
 
   function filterGreaterThan() {
-    if(isNaN(query)){
+    if (isNaN(query)) {
       alert("Query must be a number");
-      return
+      return;
     }
 
-    const filteredData = data.filter(d => {
+    const filteredData = data.filter((d) => {
       const column = d[select.column];
       return column && Number(column) > Number(query);
-    })
+    });
 
-    setTableData(filteredData)
+    setTableData(filteredData);
   }
 
   function filterLessThan() {
-    if(isNaN(query)){
+    if (isNaN(query)) {
       alert("Query must be a number");
-      return
+      return;
     }
 
-    const filteredData = data.filter(d => {
+    const filteredData = data.filter((d) => {
       const column = d[select.column];
       return column && Number(column) < Number(query);
-    })
+    });
 
-    setTableData(filteredData)
+    setTableData(filteredData);
   }
 
   function handleChangeQuery(e) {
@@ -146,6 +143,7 @@ export default function InputAdornments() {
     setTableData(data);
     setSelect({ column: "", queryType: "" });
     setQuery("");
+    setIsFiltering(false);
   }
 
   function handleChangeValue(e) {
@@ -155,8 +153,6 @@ export default function InputAdornments() {
       ...prevState,
       [name]: value,
     }));
-
-    console.log(`Updated ${name}:`, value);
   }
 
   return (
