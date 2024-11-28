@@ -28,7 +28,7 @@ export default function InputAdornments() {
   const data = useSelector((state) => state.tableData);
   const { setTableData } = useTableData();
   const [headings, setHeadings] = React.useState([]);
-  const { setIsFiltering } = usePagination();
+  const { setIsFiltering, setCurrentPage } = usePagination();
   const [query, setQuery] = React.useState("");
   const [select, setSelect] = React.useState({
     column: "",
@@ -60,6 +60,7 @@ export default function InputAdornments() {
     }
 
     setIsFiltering(true);
+    setCurrentPage(0);
 
     if (select.queryType === "contains") {
       filterContains();
