@@ -9,7 +9,14 @@ export function PaginationProvider({ children }) {
 
   return (
     <paginationContext.Provider
-      value={{ currentPage, setCurrentPage, rows, setRows, isFiltering, setIsFiltering }}
+      value={{
+        currentPage,
+        setCurrentPage,
+        rows,
+        setRows,
+        isFiltering,
+        setIsFiltering,
+      }}
     >
       {children}
     </paginationContext.Provider>

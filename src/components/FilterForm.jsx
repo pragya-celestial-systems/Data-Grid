@@ -36,7 +36,9 @@ export default function InputAdornments() {
   });
 
   React.useEffect(() => {
-    setHeadings(Object.keys(data[0]));
+    if (data) {
+      setHeadings(Object.keys(data[0]));
+    }
   }, [data]);
 
   function validateFormData(obj) {

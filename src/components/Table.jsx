@@ -18,12 +18,27 @@ export default function BasicTable() {
   const { tableData } = useTableData();
   const { filteredData, setFilteredData } = useTableData();
   const { currentPage, rows } = usePagination();
-  const { rowsToBeDeleted, setRowsToBeDeleted } = useRowContext();
+  const {
+    rowsToBeDeleted,
+    setRowsToBeDeleted,
+    areAllSelected,
+    setAreAllSelected,
+  } = useRowContext();
   const tableRef = useRef();
 
   useEffect(() => {
+    if (areAllSelected) {
+      const uniqueKeys = filteredData.map((data) => {
+        return data.unique_key;
+      });
+
+      setRowsToBeDeleted(uniqueKeys);
+    }
+  }, [areAllSelected]);
+
+  useEffect(() => {
     if (tableData) {
-      const startIndex = currentPage * rows; 
+      const startIndex = currentPage * rows;
       const endIndex = startIndex + rows;
       setFilteredData(tableData.slice(startIndex, endIndex));
     }
@@ -38,6 +53,7 @@ export default function BasicTable() {
 
     dispatch(deleteRow({ rows: rowsToBeDeleted }));
     setRowsToBeDeleted([]);
+    setAreAllSelected(false);
   }
 
   return (

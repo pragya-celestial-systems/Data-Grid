@@ -3,16 +3,16 @@ import { createContext, useContext, useState } from "react";
 const rowContext = createContext();
 
 export function RowProvider({ children }) {
-  const [rowsSelected, setRowsSelected] = useState([]);
   const [rowsToBeDeleted, setRowsToBeDeleted] = useState([]);
+  const [areAllSelected, setAreAllSelected] = useState(false);
 
   return (
     <rowContext.Provider
       value={{
-        rowsSelected,
-        setRowsSelected,
         rowsToBeDeleted,
         setRowsToBeDeleted,
+        areAllSelected,
+        setAreAllSelected
       }}
     >
       {children}
