@@ -1,10 +1,11 @@
 import { Button, TextField } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setTableData } from "../store/slices/table.slice";
 import { v4 as uuidv4 } from "uuid";
 import { makeStyles } from "@mui/styles";
+import { useDropzone } from "react-dropzone";
 
 const useFromStyles = makeStyles({
   container: {
@@ -31,12 +32,32 @@ const useFromStyles = makeStyles({
   button: {
     marginTop: "1rem !important",
   },
+  fileInput: {
+    padding:'0.5rem',
+    border: '1px solid lightgrey',
+    color:'grey',
+    fontWeight:700
+  },
+  selectedFileText: {
+    fontWeight:700,
+    color:'green'
+  }
 });
 
 function UploadFileForm() {
+  const onDrop = useCallback((acceptedFiles) => {
+    if (acceptedFiles.length > 0) {
+      setFile(acceptedFiles[0]);
+    }
+  }, []);
   const [file, setFile] = useState(null);
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: { "application/json": [".json"], "text/csv": [".csv"] },
+    multiple: false,
+  });
   const classes = useFromStyles();
 
   async function fetchJsonData() {
@@ -107,20 +128,20 @@ function UploadFileForm() {
     }
   }
 
-  function handleFileChange(e) {
-    setFile(e.target.files[0]);
-  }
-
   return (
     <div className={classes.container}>
       <form className={classes.form}>
-        <TextField
-          className={classes.input}
-          onChange={handleFileChange}
-          variant="outlined"
-          type="file"
-          inputProps={{ accept: ".json,.csv" }}
-        />
+        <div {...getRootProps()} className={classes.dropzone}>
+          <input {...getInputProps()} />
+          {isDragActive ? (
+            <p className={classes.fileInput}>Drop the file here...</p>
+          ) : (
+            <p className={classes.fileInput}>
+              Drag 'n' drop a file here, or click to select one
+            </p>
+          )}
+          {file && <p className={classes.selectedFileText}>Selected file: {file.name}</p>}
+        </div>
         <Button
           onClick={handleFileUpload}
           variant="contained"

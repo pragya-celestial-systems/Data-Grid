@@ -11,6 +11,7 @@ import {
 import { useSelector } from "react-redux";
 import { useTableData } from "../context/tableData";
 import { makeStyles } from "@mui/styles";
+import { usePagination } from "../context/PaginationContext";
 
 const useFormStyles = makeStyles({
   formContainer: {
@@ -30,13 +31,16 @@ const useFormStyles = makeStyles({
 export default function InputAdornments() {
   const classes = useFormStyles();
   const data = useSelector((state) => state.tableData);
-  const { setTableData } = useTableData();
+  const { setTableData, tableData } = useTableData();
   const [headings, setHeadings] = React.useState([]);
+  const {setIsFiltering} = usePagination();
   const [query, setQuery] = React.useState("");
   const [select, setSelect] = React.useState({
     column: "",
     queryType: "",
   });
+
+  console.log(data.length, tableData.length, filteredData.length);
 
   React.useEffect(() => {
     setHeadings(Object.keys(data[0]));
@@ -62,15 +66,15 @@ export default function InputAdornments() {
       return;
     }
 
+    setIsFiltering(true);
+
     if (select.queryType === "contains") {
       filterContains();
-      console.log(select, query);
       return;
     }
 
     if (select.queryType === "equals") {
       filterEquals();
-      console.log(select, query);
       return;
     }
 
@@ -146,6 +150,7 @@ export default function InputAdornments() {
     setTableData(data);
     setSelect({ column: "", queryType: "" });
     setQuery("");
+    setIsFiltering(false);
   }
 
   function handleChangeValue(e) {
@@ -155,8 +160,6 @@ export default function InputAdornments() {
       ...prevState,
       [name]: value,
     }));
-
-    console.log(`Updated ${name}:`, value);
   }
 
   return (
