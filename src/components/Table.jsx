@@ -28,7 +28,6 @@ export default function BasicTable() {
       setFilteredData(tableData.slice(startIndex, endIndex));
     }
   }, [currentPage, rows, tableData]);
-  
 
   function handleDeleteRow() {
     const confirm = window.confirm(

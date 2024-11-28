@@ -8,7 +8,8 @@ function TableHeading({ headings }) {
   useEffect(() => {
     if (headings) {
       const objectKeys = Object.keys(headings);
-      setKeys(objectKeys);
+      const updatedObjectKeys = objectKeys.splice(0, objectKeys.length - 1);
+      setKeys(updatedObjectKeys);
     }
   }, [headings]);
 

@@ -25,7 +25,8 @@ function Row({ data }) {
   useEffect(() => {
     if (data) {
       const dataArray = Object.values(data);
-      setRowData(dataArray);
+      const updatedDataArray = dataArray.splice(0, dataArray.length - 1);
+      setRowData(updatedDataArray);
     }
   }, [data]);
 

@@ -80,7 +80,6 @@ function THeading({ index, heading, columnKey }) {
   }
 
   return (
-    heading !== "unique_key" && (
       <TableCell key={index}>
         <Box
           sx={{
@@ -96,7 +95,6 @@ function THeading({ index, heading, columnKey }) {
           {heading}
         </Box>
       </TableCell>
-    )
   );
 }
 
