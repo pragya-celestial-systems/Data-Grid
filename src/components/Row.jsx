@@ -31,7 +31,14 @@ function Row({ data }) {
   }, [data]);
 
   function handleCheck(key) {
-    setRowsToBeDeleted((prevState) => [...prevState, key]);
+    if(rowsToBeDeleted.includes(key)){
+      const updatedRows = rowsToBeDeleted.filter(unique_key => unique_key !== key);
+      setRowsToBeDeleted(updatedRows);
+    }else{
+      setRowsToBeDeleted((prevState) => [...prevState, key]);
+    }
+
+    console.log(rowsToBeDeleted.includes(key));
   }
 
   return (
