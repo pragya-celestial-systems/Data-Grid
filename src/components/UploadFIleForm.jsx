@@ -47,6 +47,7 @@ const useFromStyles = makeStyles({
 function UploadFileForm() {
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles.length > 0) {
+      console.log(typeof acceptedFiles[0], acceptedFiles[0]);
       setFile(acceptedFiles[0]);
     }
   }, []);
