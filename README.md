@@ -1,6 +1,6 @@
 # Data Grid
 
-Data grid is a React and TypeScript-based table application that takes .json or .csv file and renders a table. 
+Data grid is a React-based table application that takes .json or .csv file and renders a table.
 
 ## Features
 
@@ -27,7 +27,7 @@ To run this project locally, follow these steps:
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/pragya-celestial-systems/react-table.git
+   git clone https://github.com/pragya-celestial-systems/Data-Grid.git
    ```
 
 2. **Navigate to the Project Directory:**
