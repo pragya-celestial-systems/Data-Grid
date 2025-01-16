@@ -19,7 +19,6 @@ Data grid is a React and TypeScript-based table application that takes .json or 
 
 ## Technologies Used
 - **React**
-- **TypeScript**
 - **Material UI**
 
 ## Installation and Setup
